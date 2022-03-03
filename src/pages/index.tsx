@@ -1,4 +1,5 @@
 import { Button, Flex, Stack, Text } from "@chakra-ui/react";
+import Link from "next/link";
 import { Input } from "../components/Form/Input";
 
 export default function Home() {
@@ -38,9 +39,13 @@ export default function Home() {
           <Input name="password" type="password" label="Senha:" />
 
         </Stack>
-        <Button type="submit" mt="6" colorScheme="pink" size="lg">
-          Entrar
-        </Button>
+        
+        <Link href="/dashboard" passHref>
+          <Button type="submit" mt="6" colorScheme="pink" size="lg">
+            Entrar
+          </Button>
+        </Link>
+
       </Flex>
     </Flex>
   );
