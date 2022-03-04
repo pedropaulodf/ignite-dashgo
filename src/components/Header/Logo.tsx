@@ -12,11 +12,7 @@ export function Logo({centeredLogo = false}: LogoProps) {
       letterSpacing="tight"
       w="64"
       textAlign={centeredLogo ? "center" : "left"}
-    >
-      dashgo
-      <Text as="span" ml="1" color="pink.500">
-        .
-      </Text>
+    >dashgo<Text as="span" ml="1" color="pink.500">.</Text>
     </Text>
   );
 }

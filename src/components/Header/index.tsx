@@ -1,4 +1,5 @@
 import { Flex, Icon, IconButton, useBreakpointValue } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { RiMenuLine } from "react-icons/ri";
 import { useSidebarDrawer } from "../../Contexts/SidebarDrawerContext";
 import { Logo } from "./Logo";
@@ -9,10 +10,19 @@ import { SearchBox } from "./SearchBox";
 export function Header() {
   const { onOpen } = useSidebarDrawer();
 
-  const isWideVersion = useBreakpointValue({
+  // Estado para o isWideVersion já começar como false para corrigir erro no console ao abrir a página
+  const [isWideVersion, setIsWideVersion] = useState(false);
+  
+  // Hook para monitorar o breakpoint
+  const isWideVersionChakra = useBreakpointValue({
     base: false,
     md: true,
   });
+
+  // useEffect para setar o estado
+  useEffect(() => {
+    setIsWideVersion(isWideVersionChakra);
+  },[isWideVersionChakra])
 
   return (
     <Flex
@@ -34,7 +44,7 @@ export function Header() {
           onClick={onOpen}
           mr="2"
           mt="3"
-        ></IconButton>
+        />
       )}
       <Logo />
 
