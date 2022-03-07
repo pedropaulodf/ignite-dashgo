@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup';
 import { Input } from "../components/Form/Input";
 import { Logo } from "../components/Header/Logo";
+import Link from "next/link";
 
 type SignInFormData = {
   email: string;
@@ -31,7 +32,7 @@ export default function Home() {
   }
   
   return (
-    <Flex w="100vw" h="100vh" alignItems="center" justifyContent="center">
+    <Flex w="100vw" h="100vh" alignItems="center" justifyContent="center" flexDirection="column">
       <Flex
         as="form"
         width="100%"
@@ -71,6 +72,9 @@ export default function Home() {
           Entrar
         </Button>
       </Flex>
+      <Link href="/dashboard" passHref>
+        <Button variant="">Acessar sem login</Button>
+      </Link>
     </Flex>
   );
 }
