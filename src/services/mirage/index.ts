@@ -36,7 +36,7 @@ export function makeServer() {
     // Usado para gerar dados no mirage ao iniciar a plicação
     seeds(server) {
       // Usa o model e a quantidade de usuarios
-      server.createList('user', 20);
+      server.createList('user', 10);
     },
 
     routes () {
