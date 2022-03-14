@@ -5,10 +5,10 @@ import { NotificationsNav } from "./NotificationsNav";
 import { Profile } from "./Profile";
 import { SearchBox } from "./SearchBox";
 import { RiMenuLine } from "react-icons/ri";
-// import { useSidebarDrawer } from "../../contexts/SidebarDrawerContext";
+import { useSidebarDrawer } from "../../contexts/SidebarDrawerContext";
 
 export function Header() {
-  // const { onOpen } = useSidebarDrawer();
+  const { onOpen } = useSidebarDrawer();
 
   // Estado para o isWideVersion já começar como false para corrigir erro no console ao abrir a página
   const [isWideVersion, setIsWideVersion] = useState(false);
@@ -41,7 +41,7 @@ export function Header() {
           icon={<Icon as={RiMenuLine} />}
           fontSize="24"
           variant="unstyled"
-          // onClick={onOpen}
+          onClick={onOpen}
           mr="2"
           mt="3"
         />
