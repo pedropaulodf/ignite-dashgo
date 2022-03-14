@@ -1,44 +1,45 @@
 import { Box, Flex, SimpleGrid, Text, theme } from "@chakra-ui/react";
-import { ApexOptions } from 'apexcharts';
-import dynamic from 'next/dynamic'
+import { ApexOptions } from "apexcharts";
+import dynamic from "next/dynamic";
+import Head from "next/head";
 import { Header } from "../components/Header";
 import { SideBar } from "../components/Sidebar";
 
-const Chart = dynamic(() => import ('react-apexcharts'), {ssr: false})
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const options: ApexOptions = {
   chart: {
     toolbar: {
-      show: false
+      show: false,
     },
     zoom: {
       enabled: false,
     },
-    foreColor: theme.colors.gray[500]
+    foreColor: theme.colors.gray[500],
   },
   grid: {
-    show: false
+    show: false,
   },
   dataLabels: {
-    enabled: false
+    enabled: false,
   },
   xaxis: {
-    type: 'datetime',
+    type: "datetime",
     axisBorder: {
-      color: theme.colors.gray[600]
+      color: theme.colors.gray[600],
     },
     axisTicks: {
-      color: theme.colors.gray[600]
+      color: theme.colors.gray[600],
     },
     categories: [
-      '2021-03-18T00:00:00.000Z',
-      '2021-03-19T00:00:00.000Z',
-      '2021-03-20T00:00:00.000Z',
-      '2021-03-21T00:00:00.000Z',
-      '2021-03-22T00:00:00.000Z',
-      '2021-03-23T00:00:00.000Z',
-      '2021-03-24T00:00:00.000Z'
-    ]
+      "2021-03-18T00:00:00.000Z",
+      "2021-03-19T00:00:00.000Z",
+      "2021-03-20T00:00:00.000Z",
+      "2021-03-21T00:00:00.000Z",
+      "2021-03-22T00:00:00.000Z",
+      "2021-03-23T00:00:00.000Z",
+      "2021-03-24T00:00:00.000Z",
+    ],
   },
   fill: {
     type: "gradient",
@@ -46,63 +47,64 @@ const options: ApexOptions = {
       shadeIntensity: 1,
       opacityFrom: 0.4,
       opacityTo: 0.2,
-    }
+    },
   },
-  
+
   tooltip: {
     // enabled: false,
-    theme: 'dark',
+    theme: "dark",
     style: {
-      fontSize: '12px',
-      fontFamily: 'Roboto'
+      fontSize: "12px",
+      fontFamily: "Roboto",
     },
-  }
+  },
 };
 
-const series = [
-  { name: "Series1", data: [31, 120, 10, 28, 100, 45, 80]}
-];
+const series = [{ name: "Series1", data: [31, 120, 10, 28, 100, 45, 80] }];
 
-export default function Dashboard(){
-
+export default function Dashboard() {
   return (
-    <Flex direction="column" h="100vh">
-      <Header/>
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6" >
-        <SideBar />
+    <>
+      <Head>
+        <title>Dashboard | dashgo.</title>
+      </Head>
+      <Flex direction="column" h="100vh">
+        <Header />
+        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+          <SideBar />
 
-        <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start">
-          <Box
-            p={["5", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-            pb="4"
+          <SimpleGrid
+            flex="1"
+            gap="4"
+            minChildWidth="320px"
+            alignItems="flex-start"
           >
-            <Text fontSize="lg" mb="4" >Inscritos da semana</Text>
-            <Chart 
-              options={options} 
-              series={series} 
-              type="area" 
-              height={160} 
-            />
-          </Box>
+            <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                Inscritos da semana
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
+            </Box>
 
-          <Box
-            p={["5", "8"]}
-            bg="gray.800"
-            borderRadius={8}
-            pb="4"
-          >
-            <Text fontSize="lg" mb="4" >Taxa de abertura</Text>
-            <Chart 
-              options={options} 
-              series={series} 
-              type="area" 
-              height={160} 
-            />
-          </Box>
-        </SimpleGrid>
+            <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                Taxa de abertura
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
+            </Box>
+          </SimpleGrid>
+        </Flex>
       </Flex>
-    </Flex>
-  )
+    </>
+  );
 }

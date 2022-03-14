@@ -8,6 +8,7 @@ export default class MyDocument extends Document {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
         <meta name="theme-color" content="#181B23"/>
+        <link rel="icon" type="image/png" href="favicon.png" />
         </Head>
         <body>
           <Main />
