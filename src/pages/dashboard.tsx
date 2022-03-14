@@ -49,7 +49,6 @@ const options: ApexOptions = {
       opacityTo: 0.2,
     },
   },
-
   tooltip: {
     // enabled: false,
     theme: "dark",
@@ -87,7 +86,7 @@ export default function Dashboard() {
                 options={options}
                 series={series}
                 type="area"
-                height={160}
+                height={320}
               />
             </Box>
 
@@ -99,7 +98,7 @@ export default function Dashboard() {
                 options={options}
                 series={series}
                 type="area"
-                height={160}
+                height={320}
               />
             </Box>
           </SimpleGrid>
