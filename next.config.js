@@ -3,6 +3,14 @@
 // next.config.js
 module.exports = {
   reactStrictMode: true,
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://dashgo-ignite-pedropaulodf.vercel.app/:path*',
+      },
+    ]
+  },
   async headers() {
     return [
       {
