@@ -74,11 +74,11 @@ export function makeServer() {
       this.post("/users");
 
       // Reseta o namespace para não conflitar com próprio o next/api
-      // this.namespace = "";
+      this.namespace = "";
 
       // Faz com que as requisições não tratadas pelo mirage, funcionem corretamente pelo caminho "/api"
-      // this.passthrough();
-      this.passthrough('/_next/static/development/_devPagesManifest.json');
+      this.passthrough();
+      // this.passthrough('/_next/static/development/_devPagesManifest.json');
       // this.passthrough((request) => {
       //   if (request.url === "/_next/static/development/_devPagesManifest.json") return true;
       // });
