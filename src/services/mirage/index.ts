@@ -50,7 +50,7 @@ export function makeServer() {
 
     routes() {
       // Seta o caminho default da api
-      this.namespace = "api";
+      this.namespace = "/api";
 
       // Seta um delay para TODA requisição do mirage
       this.timing = 750;
