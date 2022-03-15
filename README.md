@@ -12,6 +12,8 @@ O projeto consite em utilizar o React Query para melhorar a experiência de uso 
 
 A aplicação foi desenvolvida do zero utilizando typescript com o Chakra UI, Next.js, React-Query com Axios, React-hook-form e yup para gerir e validar alguns formulários, miragejs com faker para popular os dados do projeto.
 
+Projeto todo responsivo, incluindo as tabelas, algo extra que implementei.
+
 Fique à vontade para navegar no projeto! 😁
 
 ### Ver projeto online: 
