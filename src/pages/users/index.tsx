@@ -126,7 +126,7 @@ export default function UserList() {
               </Flex>
             ) : error ? (
               <Flex justify="center">
-                <Text>Falha ao obter dados dos usuários {error}</Text>
+                <Text>Falha ao obter dados dos usuários</Text>
               </Flex>
             ) : (
               <>
