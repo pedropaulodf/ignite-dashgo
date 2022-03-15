@@ -80,6 +80,7 @@ export function makeServer() {
       // this.passthrough();
       // this.passthrough('/_next/static/development/_devPagesManifest.json');
       this.passthrough((request) => {
+        console.log("request.url:",request.url);
         if (request.url === "/_next/static/development/_devPagesManifest.json") return true;
       });
     },
