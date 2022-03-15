@@ -84,7 +84,7 @@ export default function Home() {
               name="password"
               type="password"
               label="Senha:"
-              defaultValue="123"
+              defaultValue="12345678"
               error={errors.password}
               {...register("password")}
             />
