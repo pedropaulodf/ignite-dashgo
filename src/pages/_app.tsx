@@ -11,9 +11,9 @@ import '../styles/customGlobalStyles.css'
 
 // Verifica se o projeto está em desenvolvimento
 // o if abaixo é fornecido pelo node
-if(process.env.NODE_ENV === 'development'){
+// if(process.env.NODE_ENV === 'development'){
   makeServer();
-}
+// }
 
 
 function MyApp({ Component, pageProps }: AppProps) {
