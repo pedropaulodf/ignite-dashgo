@@ -78,10 +78,10 @@ export function makeServer() {
 
       // Faz com que as requisições não tratadas pelo mirage, funcionem corretamente pelo caminho "/api"
       // this.passthrough();
-      // this.passthrough('/_next/static/development/_devPagesManifest.json');
-      this.passthrough((request) => {
-        if (request.url === "/_next/static/development/_devPagesManifest.json") return true;
-      });
+      this.passthrough('/_next/static/development/_devPagesManifest.json');
+      // this.passthrough((request) => {
+      //   if (request.url === "/_next/static/development/_devPagesManifest.json") return true;
+      // });
     },
   });
 
