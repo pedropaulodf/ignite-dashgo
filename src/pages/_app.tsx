@@ -11,6 +11,7 @@ import '../styles/customGlobalStyles.css'
 
 // Verifica se o projeto está em desenvolvimento
 // o if abaixo é fornecido pelo node
+// DESABILITADO PARA RODAR NA VERCEL
 // if(process.env.NODE_ENV === 'development'){
   makeServer();
 // }
