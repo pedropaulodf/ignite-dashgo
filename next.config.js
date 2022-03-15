@@ -2,7 +2,7 @@
 
 // next.config.js
 module.exports = {
-  reactStrictMode: true,
+  // reactStrictMode: true,
   async rewrites() {
     return [
       {
