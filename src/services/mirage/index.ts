@@ -1,17 +1,26 @@
-import { createServer, Factory, Model } from 'miragejs'
-import faker from 'faker'
+import {
+  createServer,
+  Factory,
+  Model,
+  Response,
+  ActiveModelSerializer,
+} from "miragejs";
+import faker from "faker";
 
 type User = {
   name: string;
   email: string;
   created_at: string;
-}
+};
 
 export function makeServer() {
   const server = createServer({
+    serializers: {
+      application: ActiveModelSerializer,
+    },
     // models é como se fosse a tabela no banco
     models: {
-      user: Model.extend<Partial<User>>({})
+      user: Model.extend<Partial<User>>({}),
     },
 
     // Gerar dados em massa
@@ -20,7 +29,7 @@ export function makeServer() {
       user: Factory.extend({
         name(i: number) {
           // returna User 1, User 2 ...
-          return `User ${i + 1}`
+          return `User ${i + 1}`;
           // return `${faker.name.firstName()} ${faker.name.lastName()}`;
         },
         email() {
@@ -30,33 +39,47 @@ export function makeServer() {
           // Data, recente, ultimos 10 dias. Posso remover o new Date()
           return faker.date.recent(10, new Date());
         },
-      })
+      }),
     },
 
     // Usado para gerar dados no mirage ao iniciar a plicação
     seeds(server) {
       // Usa o model e a quantidade de usuarios
-      server.createList('user', 10);
+      server.createList("user", 123);
     },
 
-    routes () {
+    routes() {
       // Seta o caminho default da api
-      this.namespace = 'api';
+      this.namespace = "api";
 
       // Seta um delay para TODA requisição do mirage
       this.timing = 750;
 
       // Seta os métodos
-      this.get('/users');
-      this.post('/users');
+      this.get("/users", function (schema, request) {
+        const { page = 1, per_page = 10 } = request.queryParams;
+
+        const total = schema.all("user").length;
+
+        const pageStart = (Number(page) - 1) * Number(per_page);
+        const pageEnd = pageStart + Number(per_page);
+
+        const users = this.serialize(schema.all("user"))
+          .users.slice(pageStart, pageEnd);
+
+        return new Response(200, { "x-total-count": String(total) }, { users });
+      });
+
+      this.get("/users/:id");
+      this.post("/users");
 
       // Reseta o namespace para não conflitar com próprio o next/api
-      this.namespace = '';
+      this.namespace = "";
 
       // Faz com que as requisições não tratadas pelo mirage, funcionem corretamente pelo caminho "/api"
       this.passthrough();
-    }
-  })
+    },
+  });
 
   return server;
 }

@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Icon,
+  Link,
   Spinner,
   Table,
   Tbody,
@@ -12,41 +13,27 @@ import {
   Text,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useBreakpointValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useEffect, useState } from "react";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import { useQuery } from "react-query";
+import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/Sidebar";
+import { api } from "../../services/api";
+import { useUsers } from "../../services/hooks/useUsers";
+import { queryClient } from "../../services/queryClient";
 
 export default function UserList() {
-  const { data, isLoading, error } = useQuery("users", async () => {
-    const response = await fetch("http://localhost:3000/api/users");
-    const data = await response.json();
+  const [paginationCurrentPage, setPaginationCurrentPage] = useState(1);
 
-    const users = data.users.map(user => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric',
-        }),
-      }
-    })
-
-    return users;
-  },
-  {
-    staleTime: 1000 * 5,
-  });
+  const { data, isLoading, isFetching, refetch, error } = useUsers(
+    paginationCurrentPage
+  );
 
   // Estado para o isWideVersion já começar como false para corrigir bug ao abrir a página
   const [isWideVersion, setIsWideVersion] = useState(false);
@@ -62,8 +49,17 @@ export default function UserList() {
     setIsWideVersion(isWideVersionChakra);
   }, [isWideVersionChakra]);
 
-  useEffect(() => {}, []);
+  async function handlePrefetchUser(userId: number){
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`);
 
+      return response.data;
+    },
+    {
+      staleTime: 1000 * 60 * 10, // 10 minutes
+    });
+  }
+  
   return (
     <>
       <Head>
@@ -79,22 +75,49 @@ export default function UserList() {
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 Usuários
+                {!isLoading && isFetching && (
+                  <Spinner size="sm" color="gray.500" ml="4" />
+                )}
               </Heading>
-
-              <Link href="/users/create" passHref>
-                <Button
-                  as="a"
-                  size="sm"
-                  fontSize="sm"
-                  colorScheme="pink"
-                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-                  _hover={{
-                    cursor: "pointer",
-                  }}
+              <Flex gap="4">
+                <Tooltip
+                  label="Atualizar"
+                  hasArrow
+                  shouldWrapChildren
+                  placement="left"
                 >
-                  Criar novo
-                </Button>
-              </Link>
+                  <Button
+                    size="sm"
+                    fontSize="sm"
+                    colorScheme="blue"
+                    variant="outline"
+                    disabled={!isLoading && isFetching}
+                    _hover={{
+                      backgroundColor: "blue.900",
+                    }}
+                    _active={{
+                      backgroundColor: "blue.900",
+                    }}
+                    onClick={() => refetch()}
+                  >
+                    <Icon as={RiRefreshLine} fontSize="16" />
+                  </Button>
+                </Tooltip>
+                <NextLink href="/users/create" passHref>
+                  <Button
+                    as="a"
+                    size="sm"
+                    fontSize="sm"
+                    colorScheme="pink"
+                    leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+                    _hover={{
+                      cursor: "pointer",
+                    }}
+                  >
+                    Criar novo
+                  </Button>
+                </NextLink>
+              </Flex>
             </Flex>
 
             {isLoading ? (
@@ -133,7 +156,7 @@ export default function UserList() {
                     )}
                   </Thead>
                   <Tbody>
-                    {data.map((user) => (
+                    {data.users.map((user) => (
                       <Tr
                         key={user.id}
                         display={["block", "block", "table-row"]}
@@ -183,7 +206,9 @@ export default function UserList() {
                           data-label={!isWideVersion ? "Usuário:" : ""}
                         >
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
                             <Text fontSize="sm" color="gray.300">
                               {user.email}
                             </Text>
@@ -207,7 +232,7 @@ export default function UserList() {
                           }}
                           data-label={!isWideVersion ? "Data de Cadastro:" : ""}
                         >
-                          {user.createdAt}
+                          {user.created_at}
                         </Td>
                         <Td
                           px={["0", "0", "6"]}
@@ -245,7 +270,11 @@ export default function UserList() {
                   </Tbody>
                 </Table>
 
-                <Pagination />
+                <Pagination
+                  totalCountOfRegisters={data.totalCount}
+                  currentPage={paginationCurrentPage}
+                  onPageChange={setPaginationCurrentPage}
+                />
               </>
             )}
           </Box>

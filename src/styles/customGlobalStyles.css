@@ -1,0 +1,9 @@
+/* Apex Charts Custom Styles */
+.apexcharts-menu {
+  background-color: #1F2029 !important;
+  border: 1px solid #353646 !important;
+}
+
+.apexcharts-menu-item:hover {
+  background-color: #4B4D63 !important;
+}

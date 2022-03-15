@@ -8,14 +8,19 @@ import { SideBar } from "../components/Sidebar";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 const options: ApexOptions = {
+  theme: {
+    mode: "dark"
+  },
+  colors: ['#ED64A6', '#F6E05E', '#68D391'],
   chart: {
     toolbar: {
-      show: false,
+      show: true,
     },
     zoom: {
       enabled: false,
     },
     foreColor: theme.colors.gray[500],
+    background: 'transparent',
   },
   grid: {
     show: false,
@@ -59,7 +64,26 @@ const options: ApexOptions = {
   },
 };
 
-const series = [{ name: "Series1", data: [31, 120, 10, 28, 100, 45, 80] }];
+const optionsChartFillLess = {
+  ...options,
+  fill: {}
+}
+
+const series1 = [{
+  name: 'Info 1',
+  data: [31, 40, 28, 51, 42, 109, 100],
+}];
+
+const series3 = [{
+  name: 'Info 1',
+  data: [31, 40, 28, 51, 42, 109, 100],
+}, {
+  name: 'Info 2',
+  data: [11, 32, 45, 32, 34, 52, 41]
+}, {
+  name: 'Info 3',
+  data: [75, 38, 65, 12, 14, 42, 61]
+}];
 
 export default function Dashboard() {
   return (
@@ -75,7 +99,7 @@ export default function Dashboard() {
           <SimpleGrid
             flex="1"
             gap="4"
-            minChildWidth="320px"
+            minChildWidth="400px"
             alignItems="flex-start"
           >
             <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">
@@ -84,9 +108,9 @@ export default function Dashboard() {
               </Text>
               <Chart
                 options={options}
-                series={series}
+                series={series3}
                 type="area"
-                height={320}
+                height={180}
               />
             </Box>
 
@@ -95,10 +119,34 @@ export default function Dashboard() {
                 Taxa de abertura
               </Text>
               <Chart
+                options={optionsChartFillLess}
+                series={series3}
+                type="line"
+                height={180}
+              />
+            </Box>
+
+            <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                Downloads do App
+              </Text>
+              <Chart
+                options={optionsChartFillLess}
+                series={series1}
+                type="histogram"
+                height={180}
+              />
+            </Box>
+
+            <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                Vídeo mais acessado
+              </Text>
+              <Chart
                 options={options}
-                series={series}
-                type="area"
-                height={320}
+                series={series3}
+                type="heatmap"
+                height={180}
               />
             </Box>
           </SimpleGrid>
