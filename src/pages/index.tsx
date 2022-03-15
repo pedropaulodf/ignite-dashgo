@@ -6,6 +6,7 @@ import { Input } from "../components/Form/Input";
 import { Logo } from "../components/Header/Logo";
 import Link from "next/link";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 type SignInFormData = {
   email: string;
@@ -18,6 +19,9 @@ const signInFormSchema = yup.object().shape({
 });
 
 export default function Home() {
+
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -28,7 +32,13 @@ export default function Home() {
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (values) => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(values);
+    // console.log(values);
+
+    // APENAS PARA A DEMONSTRAÇÃO DE LOGIN
+    if(values.email !== "" && values.password !== ""){
+      router.push('/dashboard');
+    }
+
   };
 
   return (
@@ -66,6 +76,7 @@ export default function Home() {
               name="email"
               type="email"
               label="E-mail:"
+              defaultValue="jhondoe@email.com"
               error={errors.email}
               {...register("email")}
             />
@@ -73,6 +84,7 @@ export default function Home() {
               name="password"
               type="password"
               label="Senha:"
+              defaultValue="123"
               error={errors.password}
               {...register("password")}
             />
@@ -84,14 +96,10 @@ export default function Home() {
             colorScheme="pink"
             size="lg"
             isLoading={isSubmitting}
-            loadingText="aguarde..."
           >
             Entrar
           </Button>
         </Flex>
-        <Link href="/dashboard" passHref>
-          <Button variant="">Acessar sem login</Button>
-        </Link>
       </Flex>
     </>
   );

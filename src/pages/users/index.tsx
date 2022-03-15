@@ -20,7 +20,7 @@ import {
 import Head from "next/head";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
-import { RiAddLine, RiPencilLine, RiRefreshLine } from "react-icons/ri";
+import { RiAddLine, RiPencilLine, RiRefreshLine, RiDeleteBin3Line } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { SideBar } from "../../components/Sidebar";
@@ -30,6 +30,7 @@ import { queryClient } from "../../services/queryClient";
 
 export default function UserList() {
   const [paginationCurrentPage, setPaginationCurrentPage] = useState(1);
+  const [checkedUsersIds, setCheckedUsersIds] = useState([]);
 
   const { data, isLoading, isFetching, refetch, error } = useUsers(
     paginationCurrentPage
@@ -49,17 +50,20 @@ export default function UserList() {
     setIsWideVersion(isWideVersionChakra);
   }, [isWideVersionChakra]);
 
-  async function handlePrefetchUser(userId: number){
-    await queryClient.prefetchQuery(['user', userId], async () => {
-      const response = await api.get(`users/${userId}`);
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
 
-      return response.data;
-    },
-    {
-      staleTime: 1000 * 60 * 10, // 10 minutes
-    });
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, // 10 minutes
+      }
+    );
   }
-  
+
   return (
     <>
       <Head>
@@ -136,11 +140,27 @@ export default function UserList() {
                     {isWideVersion ? (
                       <Tr>
                         <Th px={["0", "0", "6"]} color="gray.300" width="8">
-                          <Checkbox colorScheme="pink" />
+                          <Checkbox
+                            colorScheme="pink"
+                            isChecked={
+                              checkedUsersIds.length ===
+                              data.users.map((user) => user.id).length
+                            }
+                            onChange={() => {
+                              const usersIds = data.users.map(
+                                (user) => user.id
+                              );
+                              if (checkedUsersIds.length === usersIds.length) {
+                                setCheckedUsersIds([]);
+                              } else {
+                                setCheckedUsersIds(usersIds);
+                              }
+                            }}
+                          />
                         </Th>
                         <Th>Usuário</Th>
                         <Th>Data de cadastro</Th>
-                        <Th>Ações</Th>
+                        <Th width="0px">Ações</Th>
                       </Tr>
                     ) : (
                       <Tr>
@@ -151,7 +171,23 @@ export default function UserList() {
                           justifyContent="space-between"
                         >
                           <Text>Selecionar todos:</Text>
-                          <Checkbox colorScheme="pink" />
+                          <Checkbox
+                            colorScheme="pink"
+                            isChecked={
+                              checkedUsersIds.length ===
+                              data.users.map((user) => user.id).length
+                            }
+                            onChange={() => {
+                              const usersIds = data.users.map(
+                                (user) => user.id
+                              );
+                              if (checkedUsersIds.length === usersIds.length) {
+                                setCheckedUsersIds([]);
+                              } else {
+                                setCheckedUsersIds(usersIds);
+                              }
+                            }}
+                          />
                         </Th>
                       </Tr>
                     )}
@@ -186,7 +222,26 @@ export default function UserList() {
                           }}
                           data-label={!isWideVersion ? "Check:" : ""}
                         >
-                          <Checkbox colorScheme="pink" />
+                          <Checkbox
+                            colorScheme="pink"
+                            isChecked={checkedUsersIds.includes(user.id)}
+                            onChange={(event) => {
+                              event.stopPropagation();
+                              const index = checkedUsersIds.indexOf(user.id);
+
+                              if (index > -1) {
+                                setCheckedUsersIds([
+                                  ...checkedUsersIds.slice(0, index),
+                                  ...checkedUsersIds.slice(index + 1),
+                                ]);
+                              } else {
+                                setCheckedUsersIds([
+                                  ...checkedUsersIds,
+                                  user.id,
+                                ]);
+                              }
+                            }}
+                          />
                         </Td>
                         <Td
                           px={["0", "0", "6"]}
@@ -206,11 +261,20 @@ export default function UserList() {
                           }}
                           data-label={!isWideVersion ? "Usuário:" : ""}
                         >
-                          <Box>
-                            <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
+                          <Box ml="1">
+                            <Link
+                              color="purple.400"
+                              onMouseEnter={() =>
+                                handlePrefetchUser(Number(user.id))
+                              }
+                            >
                               <Text fontWeight="bold">{user.name}</Text>
                             </Link>
-                            <Text fontSize="sm" color="gray.300" wordBreak="break-all">
+                            <Text
+                              fontSize="sm"
+                              color="gray.300"
+                              wordBreak="break-all"
+                            >
                               {user.email}
                             </Text>
                           </Box>
@@ -253,18 +317,36 @@ export default function UserList() {
                           }}
                           data-label={!isWideVersion ? "Ações:" : ""}
                         >
-                          <Button
-                            as="a"
-                            size="sm"
-                            fontSize="sm"
-                            colorScheme="purple"
-                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                            _hover={{
-                              cursor: "pointer",
-                            }}
-                          >
-                            Editar
-                          </Button>
+                          <Flex gap="2">
+                            <Button
+                              as="a"
+                              size="sm"
+                              fontSize="sm"
+                              colorScheme="purple"
+                              leftIcon={
+                                <Icon as={RiPencilLine} fontSize="16" />
+                              }
+                              _hover={{
+                                cursor: "pointer",
+                              }}
+                            >
+                              Editar
+                            </Button>
+                            <Button
+                              as="a"
+                              size="sm"
+                              fontSize="sm"
+                              colorScheme="red"
+                              leftIcon={
+                                <Icon as={RiDeleteBin3Line} fontSize="16" />
+                              }
+                              _hover={{
+                                cursor: "pointer",
+                              }}
+                            >
+                              Excluir
+                            </Button>
+                          </Flex>
                         </Td>
                       </Tr>
                     ))}

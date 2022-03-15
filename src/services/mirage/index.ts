@@ -29,8 +29,8 @@ export function makeServer() {
       user: Factory.extend({
         name(i: number) {
           // returna User 1, User 2 ...
-          return `User ${i + 1}`;
-          // return `${faker.name.firstName()} ${faker.name.lastName()}`;
+          // return `User ${i + 1}`;
+          return `${faker.name.firstName()} ${faker.name.lastName()}`;
         },
         email() {
           return faker.internet.email().toLowerCase();
