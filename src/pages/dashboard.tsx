@@ -99,7 +99,7 @@ export default function Dashboard() {
           <SimpleGrid
             flex="1"
             gap="4"
-            minChildWidth="400px"
+            minChildWidth={["320px","400px","400px"]}
             alignItems="flex-start"
           >
             <Box p={["5", "8"]} bg="gray.800" borderRadius={8} pb="4">

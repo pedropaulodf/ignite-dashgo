@@ -91,6 +91,7 @@ export default function UserList() {
                     fontSize="sm"
                     colorScheme="blue"
                     variant="outline"
+                    display={["none", "block"]}
                     disabled={!isLoading && isFetching}
                     _hover={{
                       backgroundColor: "blue.900",
@@ -209,7 +210,7 @@ export default function UserList() {
                             <Link color="purple.400" onMouseEnter={() => handlePrefetchUser(Number(user.id))}>
                               <Text fontWeight="bold">{user.name}</Text>
                             </Link>
-                            <Text fontSize="sm" color="gray.300">
+                            <Text fontSize="sm" color="gray.300" wordBreak="break-all">
                               {user.email}
                             </Text>
                           </Box>
